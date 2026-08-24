@@ -3,12 +3,13 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from dotenv import load_dotenv
 
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+WEB_APP_URL = "https://24pair.ru/"
 
 dp = Dispatcher()
 
@@ -23,8 +24,20 @@ async def start(message: Message) -> None:
         )
         return
 
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Да",
+                    web_app={"url": WEB_APP_URL},
+                )
+            ]
+        ]
+    )
+
     await message.answer(
-        f"Привет, @{username}! Добро пожаловать в Knot."
+        "Хотите ли вы присоединиться к сервису knot?",
+        reply_markup=keyboard,
     )
 
 
