@@ -1,5 +1,4 @@
 import os
-import requests
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,19 +37,16 @@ class RequestActionPayload(BaseModel):
     user_id: int
 
 
-def send_friend_request_to_bot(sender_username: str, receiver_telegram_id: int) -> None:
-    if not BOT_TOKEN or not receiver_telegram_id:
-        return
-
-    text = f"@{sender_username} хочет добавить тебя в друзья."
-
-    requests.post(
-        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-        json={
-            "chat_id": receiver_telegram_id,
-            "text": text,
-        },
+def is_friend(db, user_id: int, friend_id: int) -> bool:
+    friendship = (
+        db.query(models.Friendship)
+        .filter(
+            models.Friendship.user_id == user_id,
+            models.Friendship.friend_id == friend_id,
+        )
+        .first()
     )
+    return friendship is not None
 
 
 @app.get("/health")
@@ -123,6 +119,10 @@ async def invite(payload: InvitePayload):
         db.close()
         return {"status": "error", "detail": "cannot_invite_yourself"}
 
+    if is_friend(db, sender.id, receiver.id):
+        db.close()
+        return {"status": "error", "detail": "already_friends"}
+
     existing = (
         db.query(models.FriendRequest)
         .filter(
@@ -137,6 +137,20 @@ async def invite(payload: InvitePayload):
         db.close()
         return {"status": "error", "detail": "request_already_exists"}
 
+    reverse = (
+        db.query(models.FriendRequest)
+        .filter(
+            models.FriendRequest.sender_id == receiver.id,
+            models.FriendRequest.receiver_id == sender.id,
+            models.FriendRequest.status == "pending",
+        )
+        .first()
+    )
+
+    if reverse:
+        db.close()
+        return {"status": "error", "detail": "request_already_exists"}
+
     request = models.FriendRequest(
         sender_id=sender.id,
         receiver_id=receiver.id,
@@ -145,8 +159,6 @@ async def invite(payload: InvitePayload):
     db.add(request)
     db.commit()
     db.refresh(request)
-
-    send_friend_request_to_bot(sender.username, receiver.telegram_id)
 
     db.close()
 
@@ -198,10 +210,11 @@ async def accept_request(payload: RequestActionPayload):
     request.status = "accepted"
     db.add(request)
 
-    friendship1 = models.Friendship(user_id=request.sender_id, friend_id=request.receiver_id)
-    friendship2 = models.Friendship(user_id=request.receiver_id, friend_id=request.sender_id)
-    db.add(friendship1)
-    db.add(friendship2)
+    if not is_friend(db, request.sender_id, request.receiver_id):
+        db.add(models.Friendship(user_id=request.sender_id, friend_id=request.receiver_id))
+
+    if not is_friend(db, request.receiver_id, request.sender_id):
+        db.add(models.Friendship(user_id=request.receiver_id, friend_id=request.sender_id))
 
     db.commit()
 
