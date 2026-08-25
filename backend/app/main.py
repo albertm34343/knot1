@@ -30,6 +30,10 @@ class AuthPayload(BaseModel):
     init_data: str
 
 
+class DeleteAccountPayload(BaseModel):
+    user_id: int
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
@@ -58,3 +62,29 @@ async def auth(payload: AuthPayload):
     db.close()
 
     return {"status": "ok", "user_id": user.id, "username": user.username}
+
+
+@app.post("/account/delete")
+async def delete_account(payload: DeleteAccountPayload):
+    db = SessionLocal()
+
+    user = db.query(models.User).filter(models.User.id == payload.user_id).first()
+
+    if not user:
+        db.close()
+        return {"status": "error", "detail": "user_not_found"}
+
+    db.query(models.Friendship).filter(
+        (models.Friendship.user_id == user.id) | (models.Friendship.friend_id == user.id)
+    ).delete()
+
+    db.query(models.FriendRequest).filter(
+        (models.FriendRequest.sender_id == user.id) | (models.FriendRequest.receiver_id == user.id)
+    ).delete()
+
+    db.delete(user)
+    db.commit()
+
+    db.close()
+
+    return {"status": "ok", "detail": "account_deleted"}

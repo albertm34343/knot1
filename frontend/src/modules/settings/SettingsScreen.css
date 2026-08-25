@@ -32,3 +32,15 @@
 .settings-item-danger:active {
   background: #2a1515;
 }
+
+.settings-error {
+  margin-top: 12px;
+  color: #ff4d4d;
+  font-size: 13px;
+}
+
+.settings-deleted-text {
+  margin-top: 12px;
+  color: #ffffff;
+  font-size: 15px;
+}
