@@ -5,6 +5,7 @@ function PeopleScreen() {
   const navigate = useNavigate()
   const [userId, setUserId] = useState(0)
   const [inviteUsername, setInviteUsername] = useState('')
+  const [result, setResult] = useState('')
 
   useEffect(() => {
     const storedUserId = Number(localStorage.getItem('user_id') || 0)
@@ -25,10 +26,13 @@ function PeopleScreen() {
       }),
     })
       .then((res) => res.json())
-      .then(() => {
+      .then((data) => {
+        setResult(JSON.stringify(data))
         setInviteUsername('')
       })
-      .catch(() => {})
+      .catch((err) => {
+        setResult('Ошибка: ' + err.message)
+      })
   }
 
   return (
@@ -51,6 +55,8 @@ function PeopleScreen() {
           Пригласить
         </button>
       </div>
+
+      {result && <div className="result">{result}</div>}
     </div>
   )
 }
