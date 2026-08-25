@@ -80,8 +80,10 @@ function PeopleScreen() {
         if (data.status === 'error') {
           if (data.detail === 'cannot_invite_yourself') {
             setError('Нельзя пригласить самого себя')
-          } else if (data.detail === 'request_already_exists') {
+          } else if (data.detail === 'request_already_sent') {
             setError(`Вы уже отправили заявку @${data.username}`)
+          } else if (data.detail === 'request_received') {
+            setError(`@${data.username} уже отправил вам заявку в друзья`)
           } else if (data.detail === 'already_friends') {
             setError(`@${data.username} уже в друзьях`)
           } else if (data.detail === 'user_not_found') {

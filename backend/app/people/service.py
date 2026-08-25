@@ -62,7 +62,7 @@ def create_friend_request(db: Session, payload: dict):
     )
 
     if existing:
-        return {"status": "error", "detail": "request_already_exists", "username": receiver.username}
+        return {"status": "error", "detail": "request_already_sent", "username": receiver.username}
 
     reverse = (
         db.query(models.FriendRequest)
@@ -75,7 +75,7 @@ def create_friend_request(db: Session, payload: dict):
     )
 
     if reverse:
-        return {"status": "error", "detail": "request_already_exists", "username": receiver.username}
+        return {"status": "error", "detail": "request_received", "username": receiver.username}
 
     request = models.FriendRequest(
         sender_id=sender.id,
