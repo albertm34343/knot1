@@ -17,15 +17,12 @@ function PeopleScreen() {
   const [requests, setRequests] = useState<FriendRequestItem[]>([])
   const [inviteUsername, setInviteUsername] = useState('')
   const [loading, setLoading] = useState(true)
-
-  const userId = Number(localStorage.getItem('user_id') || 0)
+  const [userId, setUserId] = useState(0)
 
   useEffect(() => {
-    loadFriends()
-    loadRequests()
-  }, [])
+    const storedUserId = Number(localStorage.getItem('user_id') || 0)
+    setUserId(storedUserId)
 
-  const loadFriends = () => {
     fetch('https://24pair.ru/friends')
       .then((res) => res.json())
       .then((data) => {
@@ -37,7 +34,7 @@ function PeopleScreen() {
       .finally(() => {
         setLoading(false)
       })
-  }
+  }, [])
 
   const loadRequests = () => {
     fetch(`https://24pair.ru/friends/requests/incoming?user_id=${userId}`)
@@ -52,7 +49,9 @@ function PeopleScreen() {
 
   const handleInvite = () => {
     const username = inviteUsername.trim()
-    if (!username || !userId) return
+    if (!username || !userId) {
+      return
+    }
 
     fetch('https://24pair.ru/friends/invite', {
       method: 'POST',
@@ -86,13 +85,12 @@ function PeopleScreen() {
       .then((res) => res.json())
       .then(() => {
         loadRequests()
-        loadFriends()
       })
       .catch(() => {})
   }
 
   const handleDecline = () => {
-    alert('Заявка отклонена')
+    return
   }
 
   return (
