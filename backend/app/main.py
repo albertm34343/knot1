@@ -38,21 +38,6 @@ class RequestActionPayload(BaseModel):
     user_id: int
 
 
-def send_friend_request_to_bot(sender_username: str, receiver_telegram_id: int) -> None:
-    if not BOT_TOKEN or not receiver_telegram_id:
-        return
-
-    text = f"@{sender_username} хочет добавить тебя в друзья."
-
-    requests.post(
-        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-        json={
-            "chat_id": receiver_telegram_id,
-            "text": text,
-        },
-    )
-
-
 @app.get("/health")
 async def health():
     return {"status": "ok"}
@@ -84,14 +69,24 @@ async def auth(payload: AuthPayload):
 
 
 @app.get("/friends")
-async def friends():
+async def friends(user_id: int):
     db = SessionLocal()
 
-    users = db.query(models.User).all()
+    friendships = (
+        db.query(models.Friendship)
+        .filter(models.Friendship.user_id == user_id)
+        .all()
+    )
+
+    result = []
+    for friendship in friendships:
+        friend = db.query(models.User).filter(models.User.id == friendship.friend_id).first()
+        if friend:
+            result.append({"id": friend.id, "username": friend.username})
 
     db.close()
 
-    return [{"id": user.id, "username": user.username} for user in users]
+    return result
 
 
 @app.post("/friends/invite")
@@ -104,6 +99,10 @@ async def invite(payload: InvitePayload):
     if not sender or not receiver:
         db.close()
         return {"status": "error", "detail": "user_not_found"}
+
+    if sender.id == receiver.id:
+        db.close()
+        return {"status": "error", "detail": "cannot_invite_yourself"}
 
     existing = (
         db.query(models.FriendRequest)
@@ -127,8 +126,6 @@ async def invite(payload: InvitePayload):
     db.add(request)
     db.commit()
     db.refresh(request)
-
-    send_friend_request_to_bot(sender.username, receiver.telegram_id)
 
     db.close()
 
@@ -179,8 +176,37 @@ async def accept_request(payload: RequestActionPayload):
 
     request.status = "accepted"
     db.add(request)
+
+    friendship1 = models.Friendship(user_id=request.sender_id, friend_id=request.receiver_id)
+    friendship2 = models.Friendship(user_id=request.receiver_id, friend_id=request.sender_id)
+    db.add(friendship1)
+    db.add(friendship2)
+
     db.commit()
 
     db.close()
 
     return {"status": "ok", "detail": "request_accepted"}
+
+
+@app.post("/friends/requests/decline")
+async def decline_request(payload: RequestActionPayload):
+    db = SessionLocal()
+
+    request = (
+        db.query(models.FriendRequest)
+        .filter(models.FriendRequest.id == payload.request_id)
+        .first()
+    )
+
+    if not request or request.receiver_id != payload.user_id:
+        db.close()
+        return {"status": "error", "detail": "request_not_found"}
+
+    request.status = "declined"
+    db.add(request)
+    db.commit()
+
+    db.close()
+
+    return {"status": "ok", "detail": "request_declined"}
