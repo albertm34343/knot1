@@ -56,3 +56,13 @@ body {
 .home__card:active {
   background: #222222;
 }
+
+.screen {
+  height: 100%;
+  padding: 20px;
+}
+
+.screen h1 {
+  font-size: 24px;
+  font-weight: 700;
+}

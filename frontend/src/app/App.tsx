@@ -1,4 +1,9 @@
 import { useEffect, useState } from 'react'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import PeopleScreen from '../modules/people/PeopleScreen'
+import EventsScreen from '../modules/events/EventsScreen'
+import WishlistsScreen from '../modules/wishlists/WishlistsScreen'
+import SettingsScreen from '../modules/settings/SettingsScreen'
 
 declare global {
   interface Window {
@@ -7,11 +12,33 @@ declare global {
 }
 
 const sections = [
-  { id: 'people', title: 'Люди' },
-  { id: 'events', title: 'Ивенты' },
-  { id: 'wishlists', title: 'Парные вишлисты' },
-  { id: 'settings', title: 'Настройки' },
+  { id: 'people', title: 'Люди', path: '/people' },
+  { id: 'events', title: 'Ивенты', path: '/events' },
+  { id: 'wishlists', title: 'Парные вишлисты', path: '/wishlists' },
+  { id: 'settings', title: 'Настройки', path: '/settings' },
 ]
+
+function HomeScreen() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="home">
+      <h1 className="home__title">Knot</h1>
+      <div className="home__grid">
+        {sections.map((section) => (
+          <button
+            key={section.id}
+            className="home__card"
+            type="button"
+            onClick={() => navigate(section.path)}
+          >
+            <span className="home__card-title">{section.title}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function App() {
   const [authorized, setAuthorized] = useState(false)
@@ -55,16 +82,13 @@ function App() {
   }
 
   return (
-    <div className="home">
-      <h1 className="home__title">Knot</h1>
-      <div className="home__grid">
-        {sections.map((section) => (
-          <button key={section.id} className="home__card" type="button">
-            <span className="home__card-title">{section.title}</span>
-          </button>
-        ))}
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomeScreen />} />
+      <Route path="/people" element={<PeopleScreen />} />
+      <Route path="/events" element={<EventsScreen />} />
+      <Route path="/wishlists" element={<WishlistsScreen />} />
+      <Route path="/settings" element={<SettingsScreen />} />
+    </Routes>
   )
 }
 
