@@ -22,14 +22,12 @@ function App() {
       return
     }
 
-    setInfo('initData есть')
-
     fetch('https://24pair.ru/auth', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
-      body: new URLSearchParams({
+      body: JSON.stringify({
         init_data: tg.initData,
       }),
     })
