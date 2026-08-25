@@ -14,7 +14,7 @@ body {
   font-family: 'Manrope', sans-serif;
   -webkit-font-smoothing: antialiased;
   background: #f0fdf4;
-  color: #5c4a3d;
+  color: #4b3f35;
 }
 
 .app {
@@ -39,6 +39,25 @@ body {
     radial-gradient(ellipse 60% 50% at 78% 78%, rgba(74, 222, 128, 0.25), transparent 60%),
     radial-gradient(ellipse 70% 60% at 15% 85%, rgba(34, 197, 94, 0.2), transparent 55%),
     linear-gradient(135deg, #f0fdf4 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #4ade80 100%);
+  background-size: 100% 100%;
+  animation: homeBgShift 14s ease-in-out infinite;
+}
+
+@keyframes homeBgShift {
+  0%, 100% {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 18%, rgba(134, 239, 172, 0.3), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 78% 78%, rgba(74, 222, 128, 0.25), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 15% 85%, rgba(34, 197, 94, 0.2), transparent 55%),
+      linear-gradient(135deg, #f0fdf4 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #4ade80 100%);
+  }
+  50% {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 14%, rgba(134, 239, 172, 0.35), transparent 62%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(74, 222, 128, 0.3), transparent 62%),
+      radial-gradient(ellipse 70% 60% at 12% 82%, rgba(34, 197, 94, 0.25), transparent 58%),
+      linear-gradient(135deg, #ecfdf1 0%, #d9fbe5 25%, #b7f3cf 50%, #7feaa8 75%, #45d97c 100%);
+  }
 }
 
 .home__title {
@@ -50,12 +69,17 @@ body {
   font-family: 'Rubik Dirt', cursive;
   font-weight: 400;
   font-size: clamp(2.5rem, 10vw, 5rem);
-  line-height: 0.9;
+  line-height: 1;
   letter-spacing: 0.02em;
   display: flex;
+  align-items: baseline;
   color: #dc2626;
   text-shadow: 0 4px 8px rgba(220, 38, 38, 0.25);
   pointer-events: none;
+}
+
+.home__title span {
+  display: inline-block;
 }
 
 .home__grid {
@@ -76,10 +100,11 @@ body {
   box-shadow:
     0 8px 32px rgba(31, 38, 135, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  color: #5c4a3d;
+  color: #3f352c;
   font-family: 'Manrope', sans-serif;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -103,7 +128,7 @@ body {
   font-size: 22px;
   font-weight: 600;
   margin-top: 16px;
-  color: #5c4a3d;
+  color: #4b3f35;
 }
 
 .screen h2 {
@@ -111,13 +136,13 @@ body {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #5c4a3d;
+  color: #4b3f35;
 }
 
 .back-button {
   background: transparent;
   border: none;
-  color: #5c4a3d;
+  color: #4b3f35;
   font-size: 28px;
   cursor: pointer;
   padding: 0;
