@@ -64,6 +64,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 'ok') {
+          localStorage.setItem('user_id', String(data.user_id))
           setAuthorized(true)
         }
       })

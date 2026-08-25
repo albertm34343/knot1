@@ -62,12 +62,19 @@ body {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .screen h1 {
   font-size: 24px;
   font-weight: 700;
   margin-top: 16px;
+}
+
+.screen h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
 .back-button {
@@ -145,6 +152,47 @@ body {
 
 .invite-button:active {
   opacity: 0.8;
+}
+
+.requests-block {
+  margin-top: 20px;
+}
+
+.request-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  background: #181818;
+  margin-bottom: 8px;
+}
+
+.request-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.request-accept {
+  border: none;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f0f0f;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.request-decline {
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
 .friends-list {
