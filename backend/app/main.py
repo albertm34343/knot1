@@ -2,6 +2,7 @@ import os
 import requests
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from app import models
@@ -11,6 +12,14 @@ from app.database import Base, SessionLocal, engine
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Knot API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 
