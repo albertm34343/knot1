@@ -17,6 +17,7 @@ function PeopleScreen() {
   const [requests, setRequests] = useState<FriendRequestItem[]>([])
   const [inviteUsername, setInviteUsername] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const userId = Number(localStorage.getItem('user_id') || 0)
 
@@ -65,10 +66,26 @@ function PeopleScreen() {
       }),
     })
       .then((res) => res.json())
-      .then(() => {
-        setInviteUsername('')
+      .then((data) => {
+        if (data.status === 'error') {
+          if (data.detail === 'cannot_invite_yourself') {
+            setError('Нельзя пригласить самого себя')
+          } else if (data.detail === 'request_already_exists') {
+            setError('Заявка уже отправлена')
+          } else if (data.detail === 'user_not_found') {
+            setError('Пользователь не найден')
+          } else {
+            setError('Ошибка')
+          }
+        } else {
+          setError('')
+          setInviteUsername('')
+          loadRequests()
+        }
       })
-      .catch(() => {})
+      .catch(() => {
+        setError('Ошибка сети')
+      })
   }
 
   const handleAccept = (requestId: number) => {
@@ -126,6 +143,8 @@ function PeopleScreen() {
           Пригласить
         </button>
       </div>
+
+      {error && <div className="error-text">{error}</div>}
 
       {requests.length > 0 && (
         <div className="requests-block">

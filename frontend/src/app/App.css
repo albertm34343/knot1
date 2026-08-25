@@ -154,6 +154,12 @@ body {
   opacity: 0.8;
 }
 
+.error-text {
+  margin-top: 8px;
+  color: #ff4d4d;
+  font-size: 13px;
+}
+
 .requests-block {
   margin-top: 20px;
 }
