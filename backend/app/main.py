@@ -1,6 +1,7 @@
 import os
 
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 from app import models
 from app.auth import verify_telegram_init_data
@@ -11,17 +12,21 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Knot API")
 
 
+class AuthPayload(BaseModel):
+    init_data: str
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
 
 @app.post("/auth")
-async def auth(init_data: str):
+async def auth(payload: AuthPayload):
     db = SessionLocal()
 
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
-    user_data = verify_telegram_init_data(init_data, bot_token)
+    user_data = verify_telegram_init_data(payload.init_data, bot_token)
 
     username = user_data.get("username")
     if not username:
