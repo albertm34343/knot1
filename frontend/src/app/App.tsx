@@ -55,6 +55,11 @@ function App() {
   useEffect(() => {
     const tg = window.Telegram?.WebApp
 
+    if (tg) {
+      tg.ready()
+      tg.expand()
+    }
+
     if (!tg?.initData) {
       setLoading(false)
       return
