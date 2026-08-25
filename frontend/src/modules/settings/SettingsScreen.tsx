@@ -9,6 +9,16 @@ function SettingsScreen() {
         ←
       </button>
       <h1>Настройки</h1>
+
+      <div className="settings-list">
+        <button className="settings-item" type="button">
+          Техподдержка
+        </button>
+
+        <button className="settings-item" type="button">
+          Купить полный доступ
+        </button>
+      </div>
     </div>
   )
 }
