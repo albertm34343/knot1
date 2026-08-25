@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import './SettingsScreen.css'
 
 function SettingsScreen() {
   const navigate = useNavigate()
@@ -16,7 +17,15 @@ function SettingsScreen() {
         </button>
 
         <button className="settings-item" type="button">
+          Статистика
+        </button>
+
+        <button className="settings-item" type="button">
           Купить полный доступ
+        </button>
+
+        <button className="settings-item settings-item-danger" type="button">
+          Удалить аккаунт Knot
         </button>
       </div>
     </div>
