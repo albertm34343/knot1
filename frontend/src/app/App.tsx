@@ -6,19 +6,22 @@ declare global {
   }
 }
 
+const sections = [
+  { id: 'people', title: 'Люди' },
+  { id: 'events', title: 'Ивенты' },
+  { id: 'wishlists', title: 'Парные вишлисты' },
+  { id: 'settings', title: 'Настройки' },
+]
+
 function App() {
-  const [info, setInfo] = useState('Загрузка...')
+  const [authorized, setAuthorized] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp
 
-    if (!tg) {
-      setInfo('Нет Telegram WebApp')
-      return
-    }
-
-    if (!tg.initData) {
-      setInfo('Нет initData')
+    if (!tg?.initData) {
+      setLoading(false)
       return
     }
 
@@ -33,14 +36,36 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setInfo(JSON.stringify(data))
+        if (data.status === 'ok') {
+          setAuthorized(true)
+        }
       })
-      .catch((err) => {
-        setInfo('Ошибка: ' + err.message)
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false)
       })
   }, [])
 
-  return <div className="app">{info}</div>
+  if (loading) {
+    return <div className="app">Загрузка...</div>
+  }
+
+  if (!authorized) {
+    return <div className="app">Knot</div>
+  }
+
+  return (
+    <div className="home">
+      <h1 className="home__title">Knot</h1>
+      <div className="home__grid">
+        {sections.map((section) => (
+          <button key={section.id} className="home__card" type="button">
+            <span className="home__card-title">{section.title}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default App

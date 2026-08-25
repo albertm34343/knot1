@@ -22,3 +22,37 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.home {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.home__title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.home__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.home__card {
+  height: 90px;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  background: #181818;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.home__card:active {
+  background: #222222;
+}
