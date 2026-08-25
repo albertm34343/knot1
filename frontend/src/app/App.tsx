@@ -24,7 +24,13 @@ function HomeScreen() {
 
   return (
     <div className="home">
-      <h1 className="home__title">Knot</h1>
+      <h1 className="home__title" aria-label="knot">
+        k
+        <span style={{ position: 'relative', top: '-0.04em' }}>n</span>
+        <span style={{ position: 'relative', top: '0.02em' }}>o</span>
+        <span style={{ position: 'relative', top: '-0.03em' }}>t</span>
+      </h1>
+
       <div className="home__grid">
         {sections.map((section) => (
           <button
@@ -33,7 +39,7 @@ function HomeScreen() {
             type="button"
             onClick={() => navigate(section.path)}
           >
-            <span className="home__card-title">{section.title}</span>
+            {section.title}
           </button>
         ))}
       </div>
