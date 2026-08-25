@@ -33,14 +33,14 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 20px 40px;
+  padding: 0 20px max(24px, env(safe-area-inset-bottom));
   background:
     radial-gradient(ellipse 80% 60% at 50% 18%, rgba(134, 239, 172, 0.3), transparent 60%),
     radial-gradient(ellipse 60% 50% at 78% 78%, rgba(74, 222, 128, 0.25), transparent 60%),
     radial-gradient(ellipse 70% 60% at 15% 85%, rgba(34, 197, 94, 0.2), transparent 55%),
     linear-gradient(135deg, #f0fdf4 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #4ade80 100%);
   background-size: 100% 100%;
-  animation: homeBgShift 14s ease-in-out infinite;
+  animation: homeBgShift 11s ease-in-out infinite;
 }
 
 @keyframes homeBgShift {
@@ -53,22 +53,22 @@ body {
   }
   50% {
     background:
-      radial-gradient(ellipse 80% 60% at 50% 14%, rgba(134, 239, 172, 0.35), transparent 62%),
-      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(74, 222, 128, 0.3), transparent 62%),
-      radial-gradient(ellipse 70% 60% at 12% 82%, rgba(34, 197, 94, 0.25), transparent 58%),
-      linear-gradient(135deg, #ecfdf1 0%, #d9fbe5 25%, #b7f3cf 50%, #7feaa8 75%, #45d97c 100%);
+      radial-gradient(ellipse 85% 65% at 48% 12%, rgba(134, 239, 172, 0.42), transparent 65%),
+      radial-gradient(ellipse 65% 55% at 82% 82%, rgba(74, 222, 128, 0.38), transparent 65%),
+      radial-gradient(ellipse 75% 65% at 10% 80%, rgba(34, 197, 94, 0.3), transparent 60%),
+      linear-gradient(135deg, #e9fcf0 0%, #d3f9e1 25%, #adf2c8 50%, #75e8a0 75%, #3dd773 100%);
   }
 }
 
 .home__title {
   position: absolute;
-  top: 60px;
+  top: clamp(40px, 8vh, 70px);
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
   font-family: 'Rubik Dirt', cursive;
   font-weight: 400;
-  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-size: clamp(2.2rem, 9vw, 4.5rem);
   line-height: 1;
   letter-spacing: 0.02em;
   display: flex;
@@ -88,10 +88,11 @@ body {
   gap: 10px;
   width: 100%;
   max-width: 420px;
+  margin-bottom: 4px;
 }
 
 .home__card {
-  height: 72px;
+  height: 64px;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.22);
@@ -103,15 +104,18 @@ body {
   color: #3f352c;
   font-family: 'Manrope', sans-serif;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .home__card:active {
-  transform: scale(0.97);
-  background: rgba(255, 255, 255, 0.32);
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 4px 16px rgba(31, 38, 135, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .screen {
