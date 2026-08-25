@@ -3,7 +3,14 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from aiogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    Message,
+)
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -39,6 +46,29 @@ async def start(message: Message) -> None:
         "Хотите ли вы присоединиться к сервису knot?",
         reply_markup=keyboard,
     )
+
+
+@dp.inline_query()
+async def inline_query(inline_query: InlineQuery) -> None:
+    result = InlineQueryResultArticle(
+        id="knot",
+        title="Knot",
+        input_message_content=InputTextMessageContent(
+            message_text="Открыть Knot"
+        ),
+        reply_markup=InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(
+                        text="Открыть Knot",
+                        web_app={"url": WEB_APP_URL},
+                    )
+                ]
+            ]
+        ),
+    )
+
+    await inline_query.answer([result], cache_time=0)
 
 
 async def main() -> None:
