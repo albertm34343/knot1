@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app import models
+from app.notifications import send_friend_request_notification
 
 
 def is_friend(db: Session, user_id: int, friend_id: int) -> bool:
@@ -84,6 +85,8 @@ def create_friend_request(db: Session, payload: dict):
     db.add(request)
     db.commit()
     db.refresh(request)
+
+    send_friend_request_notification(sender.username, receiver.telegram_id)
 
     return {"status": "ok", "detail": "friend_request_created"}
 
