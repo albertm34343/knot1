@@ -1,7 +1,6 @@
 import os
 
 from fastapi import FastAPI
-from sqlalchemy.orm import Session
 
 from app import models
 from app.auth import verify_telegram_init_data
@@ -17,7 +16,7 @@ async def health():
     return {"status": "ok"}
 
 
-@app.post("/api/auth")
+@app.post("/auth")
 async def auth(init_data: str):
     db = SessionLocal()
 
