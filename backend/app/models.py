@@ -9,6 +9,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
+    telegram_id = Column(Integer, unique=True, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
