@@ -60,6 +60,8 @@ body {
 .screen {
   height: 100%;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .screen h1 {
@@ -105,4 +107,65 @@ body {
 
 .settings-item:active {
   background: #222222;
+}
+
+.invite-form {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.invite-input {
+  flex: 1;
+  height: 48px;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  background: #181818;
+  color: #ffffff;
+  padding: 0 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+.invite-input::placeholder {
+  color: #777777;
+}
+
+.invite-button {
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f0f0f;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 0 16px;
+  cursor: pointer;
+}
+
+.invite-button:active {
+  opacity: 0.8;
+}
+
+.friends-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.friend-item {
+  height: 48px;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  background: #181818;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.empty {
+  color: #777777;
+  font-size: 14px;
 }
