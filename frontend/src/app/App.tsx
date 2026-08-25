@@ -7,16 +7,22 @@ declare global {
 }
 
 function App() {
-  const [user, setUser] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [info, setInfo] = useState('Загрузка...')
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp
 
-    if (!tg?.initData) {
-      setLoading(false)
+    if (!tg) {
+      setInfo('Нет Telegram WebApp')
       return
     }
+
+    if (!tg.initData) {
+      setInfo('Нет initData')
+      return
+    }
+
+    setInfo('initData есть')
 
     fetch('https://24pair.ru/auth', {
       method: 'POST',
@@ -29,25 +35,14 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.username) {
-          setUser(data.username)
-        }
+        setInfo(JSON.stringify(data))
       })
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false)
+      .catch((err) => {
+        setInfo('Ошибка: ' + err.message)
       })
   }, [])
 
-  if (loading) {
-    return <div className="app">Загрузка...</div>
-  }
-
-  if (user) {
-    return <div className="app">Привет, @{user}</div>
-  }
-
-  return <div className="app">Knot</div>
+  return <div className="app">{info}</div>
 }
 
 export default App
