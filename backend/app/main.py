@@ -1,6 +1,6 @@
 import os
 
-from fastapi import FastAPI, Header
+from fastapi import FastAPI
 from sqlalchemy.orm import Session
 
 from app import models
@@ -12,24 +12,13 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Knot API")
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
 
 @app.post("/api/auth")
-async def auth(
-    init_data: str,
-    db: Session = None,
-):
+async def auth(init_data: str):
     db = SessionLocal()
 
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
@@ -46,5 +35,7 @@ async def auth(
         db.add(user)
         db.commit()
         db.refresh(user)
+
+    db.close()
 
     return {"status": "ok", "user_id": user.id, "username": user.username}
