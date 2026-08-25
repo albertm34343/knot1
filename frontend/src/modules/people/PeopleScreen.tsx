@@ -52,6 +52,8 @@ function PeopleScreen() {
 
   const handleInvite = () => {
     const username = inviteUsername.trim()
+    alert('userId: ' + userId + ' username: ' + username)
+
     if (!username || !userId) return
 
     fetch('https://24pair.ru/friends/invite', {
@@ -69,7 +71,9 @@ function PeopleScreen() {
         alert(JSON.stringify(data))
         setInviteUsername('')
       })
-      .catch(() => {})
+      .catch((err) => {
+        alert('Ошибка: ' + err.message)
+      })
   }
 
   const handleAccept = (requestId: number) => {
