@@ -38,6 +38,21 @@ class RequestActionPayload(BaseModel):
     user_id: int
 
 
+def send_friend_request_to_bot(sender_username: str, receiver_telegram_id: int) -> None:
+    if not BOT_TOKEN or not receiver_telegram_id:
+        return
+
+    text = f"@{sender_username} хочет добавить тебя в друзья."
+
+    requests.post(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        json={
+            "chat_id": receiver_telegram_id,
+            "text": text,
+        },
+    )
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
@@ -96,7 +111,11 @@ async def invite(payload: InvitePayload):
     sender = db.query(models.User).filter(models.User.id == payload.sender_id).first()
     receiver = db.query(models.User).filter(models.User.username == payload.username).first()
 
-    if not sender or not receiver:
+    if not sender:
+        db.close()
+        return {"status": "error", "detail": "sender_not_found"}
+
+    if not receiver:
         db.close()
         return {"status": "error", "detail": "user_not_found"}
 
@@ -126,6 +145,8 @@ async def invite(payload: InvitePayload):
     db.add(request)
     db.commit()
     db.refresh(request)
+
+    send_friend_request_to_bot(sender.username, receiver.telegram_id)
 
     db.close()
 

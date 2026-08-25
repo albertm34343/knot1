@@ -16,7 +16,7 @@ function PeopleScreen() {
   const navigate = useNavigate()
   const [friends, setFriends] = useState<Friend[]>([])
   const [requests, setRequests] = useState<FriendRequestItem[]>([])
-  const [inviteUsername, setInviteUsername] = useState('')
+  const [inviteUsername, setInviteUsername] = useState('@')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -52,8 +52,17 @@ function PeopleScreen() {
     loadRequests()
   }, [])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadRequests()
+      loadFriends()
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [userId])
+
   const handleInvite = () => {
-    const username = inviteUsername.trim()
+    const username = inviteUsername.trim().replace('@', '')
     if (!username || !userId) return
 
     fetch('https://24pair.ru/friends/invite', {
@@ -74,13 +83,13 @@ function PeopleScreen() {
           } else if (data.detail === 'request_already_exists') {
             setError('Заявка уже отправлена')
           } else if (data.detail === 'user_not_found') {
-            setError('Пользователь не найден')
+            setError('Пользователь не авторизован')
           } else {
             setError('Ошибка')
           }
         } else {
           setError('')
-          setInviteUsername('')
+          setInviteUsername('@')
           loadRequests()
         }
       })
