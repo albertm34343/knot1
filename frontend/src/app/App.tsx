@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react'
 
+declare global {
+  interface Window {
+    Telegram?: any
+  }
+}
+
 function App() {
   const [user, setUser] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const tg = (window as any).Telegram?.WebApp
+    const tg = window.Telegram?.WebApp
 
     if (!tg?.initData) {
       setLoading(false)
@@ -33,17 +39,15 @@ function App() {
       })
   }, [])
 
-  return (
-    <div className="app">
-      {loading ? (
-        <div>Загрузка...</div>
-      ) : user ? (
-        <div>Привет, @{user}</div>
-      ) : (
-        <div>Knot</div>
-      )}
-    </div>
-  )
+  if (loading) {
+    return <div className="app">Загрузка...</div>
+  }
+
+  if (user) {
+    return <div className="app">Привет, @{user}</div>
+  }
+
+  return <div className="app">Knot</div>
 }
 
 export default App
