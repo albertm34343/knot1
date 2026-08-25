@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
+import SplashScreen from '../modules/splash/SplashScreen'
 import PeopleScreen from '../modules/people/PeopleScreen'
 import EventsScreen from '../modules/events/EventsScreen'
 import WishlistsScreen from '../modules/wishlists/WishlistsScreen'
@@ -43,6 +44,7 @@ function HomeScreen() {
 function App() {
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [showSplash, setShowSplash] = useState(true)
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp
@@ -73,6 +75,18 @@ function App() {
         setLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false)
+    }, 5200)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (showSplash) {
+    return <SplashScreen />
+  }
 
   if (loading) {
     return <div className="app">Загрузка...</div>
