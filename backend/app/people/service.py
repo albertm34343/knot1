@@ -49,7 +49,7 @@ def create_friend_request(db: Session, payload: dict):
         return {"status": "error", "detail": "cannot_invite_yourself"}
 
     if is_friend(db, sender.id, receiver.id):
-        return {"status": "error", "detail": "already_friends"}
+        return {"status": "error", "detail": "already_friends", "username": receiver.username}
 
     existing = (
         db.query(models.FriendRequest)
@@ -62,7 +62,7 @@ def create_friend_request(db: Session, payload: dict):
     )
 
     if existing:
-        return {"status": "error", "detail": "request_already_exists"}
+        return {"status": "error", "detail": "request_already_exists", "username": receiver.username}
 
     reverse = (
         db.query(models.FriendRequest)
@@ -75,7 +75,7 @@ def create_friend_request(db: Session, payload: dict):
     )
 
     if reverse:
-        return {"status": "error", "detail": "request_already_exists"}
+        return {"status": "error", "detail": "request_already_exists", "username": receiver.username}
 
     request = models.FriendRequest(
         sender_id=sender.id,
@@ -159,3 +159,40 @@ def decline_friend_request(db: Session, payload: dict):
     db.commit()
 
     return {"status": "ok", "detail": "request_declined"}
+
+
+def remove_friend(db: Session, payload: dict):
+    user_id = payload.get("user_id")
+    friend_id = payload.get("friend_id")
+
+    if not user_id or not friend_id:
+        return {"status": "error", "detail": "invalid_data"}
+
+    deleted = (
+        db.query(models.Friendship)
+        .filter(
+            models.Friendship.user_id == user_id,
+            models.Friendship.friend_id == friend_id,
+        )
+        .delete()
+    )
+
+    db.query(models.Friendship).filter(
+        models.Friendship.user_id == friend_id,
+        models.Friendship.friend_id == user_id,
+    ).delete()
+
+    db.commit()
+
+    if deleted == 0:
+        return {"status": "error", "detail": "friendship_not_found"}
+
+    return {"status": "ok", "detail": "friend_removed"}
+
+
+def add_to_wishlist_stub(db: Session, payload: dict):
+    return {"status": "ok", "detail": "wishlist_stub"}
+
+
+def add_to_event_stub(db: Session, payload: dict):
+    return {"status": "ok", "detail": "event_stub"}

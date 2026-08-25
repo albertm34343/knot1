@@ -81,7 +81,9 @@ function PeopleScreen() {
           if (data.detail === 'cannot_invite_yourself') {
             setError('Нельзя пригласить самого себя')
           } else if (data.detail === 'request_already_exists') {
-            setError('Заявка уже отправлена')
+            setError(`Вы уже отправили заявку @${data.username}`)
+          } else if (data.detail === 'already_friends') {
+            setError(`@${data.username} уже в друзьях`)
           } else if (data.detail === 'user_not_found') {
             setError('Пользователь не авторизован')
           } else {
@@ -135,6 +137,56 @@ function PeopleScreen() {
       .catch(() => {})
   }
 
+  const handleRemoveFriend = (friendId: number) => {
+    fetch('https://24pair.ru/friends/remove', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        friend_id: friendId,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        loadFriends()
+      })
+      .catch(() => {})
+  }
+
+  const handleAddToWishlist = (friendId: number) => {
+    fetch('https://24pair.ru/friends/add-to-wishlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        friend_id: friendId,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {})
+      .catch(() => {})
+  }
+
+  const handleAddToEvent = (friendId: number) => {
+    fetch('https://24pair.ru/friends/add-to-event', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        friend_id: friendId,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {})
+      .catch(() => {})
+  }
+
   return (
     <div className="screen">
       <button className="back-button" type="button" onClick={() => navigate('/')}>
@@ -161,7 +213,14 @@ function PeopleScreen() {
           <h2>Входящие заявки</h2>
           {requests.map((request) => (
             <div key={request.request_id} className="request-item">
-              <span>@{request.sender_username}</span>
+              <a
+                className="username-link"
+                href={`https://t.me/${request.sender_username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @{request.sender_username}
+              </a>
               <div className="request-actions">
                 <button
                   className="request-accept"
@@ -192,7 +251,37 @@ function PeopleScreen() {
         ) : (
           friends.map((friend) => (
             <div key={friend.id} className="friend-item">
-              @{friend.username}
+              <a
+                className="username-link"
+                href={`https://t.me/${friend.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @{friend.username}
+              </a>
+              <div className="friend-actions">
+                <button
+                  className="friend-action-button"
+                  type="button"
+                  onClick={() => handleAddToWishlist(friend.id)}
+                >
+                  Вишлист
+                </button>
+                <button
+                  className="friend-action-button"
+                  type="button"
+                  onClick={() => handleAddToEvent(friend.id)}
+                >
+                  Ивент
+                </button>
+                <button
+                  className="friend-remove"
+                  type="button"
+                  onClick={() => handleRemoveFriend(friend.id)}
+                >
+                  Удалить
+                </button>
+              </div>
             </div>
           ))
         )}

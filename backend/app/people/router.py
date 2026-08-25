@@ -38,3 +38,18 @@ async def accept_request(payload: dict, db: Session = Depends(get_db)):
 @router.post("/requests/decline")
 async def decline_request(payload: dict, db: Session = Depends(get_db)):
     return service.decline_friend_request(db, payload)
+
+
+@router.post("/remove")
+async def remove_friend(payload: dict, db: Session = Depends(get_db)):
+    return service.remove_friend(db, payload)
+
+
+@router.post("/add-to-wishlist")
+async def add_to_wishlist(payload: dict, db: Session = Depends(get_db)):
+    return service.add_to_wishlist_stub(db, payload)
+
+
+@router.post("/add-to-event")
+async def add_to_event(payload: dict, db: Session = Depends(get_db)):
+    return service.add_to_event_stub(db, payload)
