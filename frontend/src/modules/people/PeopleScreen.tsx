@@ -91,7 +91,7 @@ function PeopleScreen() {
       .catch(() => {})
   }
 
-  const handleDecline = (requestId: number) => {
+  const handleDecline = () => {
     alert('Заявка отклонена')
   }
 
@@ -131,7 +131,7 @@ function PeopleScreen() {
                 <button
                   className="request-decline"
                   type="button"
-                  onClick={() => handleDecline(request.request_id)}
+                  onClick={handleDecline}
                 >
                   Отклонить
                 </button>
