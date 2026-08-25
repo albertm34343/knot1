@@ -12,7 +12,7 @@ declare global {
 }
 
 const sections = [
-  { id: 'people', title: 'Люди', path: '/people' },
+  { id: 'people', title: 'Друзья', path: '/people' },
   { id: 'events', title: 'Ивенты', path: '/events' },
   { id: 'wishlists', title: 'Парные вишлисты', path: '/wishlists' },
   { id: 'settings', title: 'Настройки', path: '/settings' },

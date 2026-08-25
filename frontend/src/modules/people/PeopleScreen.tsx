@@ -8,7 +8,7 @@ function PeopleScreen() {
       <button className="back-button" type="button" onClick={() => navigate('/')}>
         ←
       </button>
-      <h1>Люди</h1>
+      <h1>Друзья</h1>
     </div>
   )
 }
