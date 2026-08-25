@@ -12,7 +12,7 @@ function App() {
       return
     }
 
-    fetch('https://24pair.ru/api/auth', {
+    fetch('https://24pair.ru/auth', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
