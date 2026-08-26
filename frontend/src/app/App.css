@@ -178,3 +178,12 @@ body {
 .back-button:active {
   opacity: 0.6;
 }
+
+.splash-fade-out {
+  animation: splashFadeOut 0.5s ease forwards;
+}
+
+@keyframes splashFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

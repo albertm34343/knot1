@@ -51,6 +51,7 @@ function App() {
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(true)
   const [showSplash, setShowSplash] = useState(true)
+  const [fadeOut, setFadeOut] = useState(false)
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp
@@ -88,15 +89,26 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const fadeTimer = setTimeout(() => {
+      setFadeOut(true)
+    }, 3000)
+
+    const hideTimer = setTimeout(() => {
       setShowSplash(false)
     }, 3500)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(fadeTimer)
+      clearTimeout(hideTimer)
+    }
   }, [])
 
   if (showSplash) {
-    return <SplashScreen />
+    return (
+      <div className={fadeOut ? 'splash-fade-out' : ''}>
+        <SplashScreen />
+      </div>
+    )
   }
 
   if (loading) {
