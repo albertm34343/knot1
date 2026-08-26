@@ -1,12 +1,12 @@
 :root{
-  --bg-0:#f0fdf4;
-  --bg-1:#dcfce7;
+  --bg-0:#12081f;
+  --bg-1:#1a0b2e;
   --gold:#ffd76b;
   --coral:#ff8f5e;
   --rose:#ff4d75;
-  --ink:#5c4a3d;
-  --ink-soft:#8b7565;
-  --dark-logo:#1a1a2e;
+  --ink:#f5edff;
+  --ink-soft:#b8a9d4;
+  --dark-logo:#ffffff;
   --impact-x: -160px;
   --impact-y: -70px;
   --start-y: -700px;
@@ -34,11 +34,44 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 18%, rgba(134, 239, 172, 0.3), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 78% 78%, rgba(74, 222, 128, 0.25), transparent 60%),
-    radial-gradient(ellipse 70% 60% at 15% 85%, rgba(34, 197, 94, 0.2), transparent 55%),
-    linear-gradient(135deg, #f0fdf4 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #4ade80 100%);
+  background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 30%, #1e3a5f 60%, #0f1b2d 100%);
+}
+
+.stage::before,
+.stage::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+.stage::before {
+  width: 80vw;
+  height: 80vw;
+  left: -20vw;
+  top: -15vw;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.45), transparent 65%);
+  animation: floatOne 9s ease-in-out infinite;
+}
+
+.stage::after {
+  width: 70vw;
+  height: 70vw;
+  right: -15vw;
+  bottom: 10vh;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.4), transparent 65%);
+  animation: floatTwo 11s ease-in-out infinite;
+}
+
+@keyframes floatOne {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 50px) scale(1.12); }
+}
+
+@keyframes floatTwo {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-36px, -46px) scale(1.1); }
 }
 
 .floor-glow{
@@ -48,7 +81,7 @@ body{
   width:min(70vw, 900px);
   height:140px;
   transform:translateX(-50%);
-  background:radial-gradient(ellipse closest-side, rgba(134, 239, 172, 0.5), transparent 75%);
+  background:radial-gradient(ellipse closest-side, rgba(168, 85, 247, 0.35), transparent 75%);
   filter:blur(6px);
   pointer-events:none;
   opacity:0;
@@ -104,8 +137,8 @@ body{
   opacity:0;
   transform:translateY(0.4em);
   filter:blur(10px);
-  color:#dc2626;
-  text-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  color:#ffffff;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
   animation:
     reveal 0.85s cubic-bezier(.16,1,.3,1) forwards;
   animation-delay: calc(300ms + var(--i) * 90ms);
