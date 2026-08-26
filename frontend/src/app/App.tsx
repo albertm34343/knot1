@@ -23,7 +23,7 @@ function HomeScreen() {
   const navigate = useNavigate()
 
   return (
-    <div className="home">
+    <div className="home home-fade-in">
       <h1 className="home__title" aria-label="knot">
         <span>k</span>
         <span>n</span>
@@ -95,7 +95,7 @@ function App() {
 
     const hideTimer = setTimeout(() => {
       setShowSplash(false)
-    }, 3000)
+    }, 2850)
 
     return () => {
       clearTimeout(fadeTimer)
