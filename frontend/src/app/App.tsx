@@ -91,11 +91,11 @@ function App() {
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
       setFadeOut(true)
-    }, 3000)
+    }, 2700)
 
     const hideTimer = setTimeout(() => {
       setShowSplash(false)
-    }, 3500)
+    }, 3000)
 
     return () => {
       clearTimeout(fadeTimer)
