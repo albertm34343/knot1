@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import SplashScreen from '../modules/splash/SplashScreen'
+import GiftPile from '../modules/home/GiftPile'
 import PeopleScreen from '../modules/people/PeopleScreen'
 import EventsScreen from '../modules/events/EventsScreen'
 import WishlistsScreen from '../modules/wishlists/WishlistsScreen'
@@ -30,6 +31,8 @@ function HomeScreen() {
         <span>o</span>
         <span>t</span>
       </h1>
+
+      <GiftPile />
 
       <div className="home__grid">
         {sections.map((section) => (
